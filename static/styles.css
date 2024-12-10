@@ -1,0 +1,71 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9fafb;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    margin: 40px auto;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.analytics-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 16px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.analytics-table thead {
+    background-color: #f4f4f4;
+}
+
+.analytics-table th {
+    color: black;
+    padding: 14px;
+    border-bottom: 2px solid #ddd;
+}
+
+.analytics-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+.analytics-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.analytics-table tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.output-box {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 20px;
+}

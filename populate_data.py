@@ -6,6 +6,12 @@ from datetime import datetime, timedelta
 conn = sqlite3.connect('retailer_2.db')
 cursor = conn.cursor()
 
+# Clear all existing data while preserving schema
+tables = ["OrderDetails", "Orders", "Inventory", "Products", "Stores", "Customers", "Vendors"]
+for table in tables:
+    cursor.execute(f"DELETE FROM {table}")
+
+print("Existing data deleted successfully.")
 
 # Populate Products table
 product_names = [
@@ -17,70 +23,86 @@ product_names = [
     "Samsung TV", "Sony TV", "LG TV", "Apple MacBook", "Dell Laptop",
     "Nike Shoes", "Adidas Shoes", "Puma Shoes", "Reebok Shoes", "Asics Shoes",
     "Levi's Jeans", "Wrangler Jeans", "Zara Shirt", "H&M Jacket", "Gucci Belt"
-]  # Add more product names if needed
+]
 brands = ["PepsiCo", "Coca-Cola", "Nestle", "Procter & Gamble", "Unilever", "Samsung", "Sony", "LG", "Apple", "Nike"]
 product_types = ["Beverage", "Snack", "Cleaning", "Personal Care", "Electronics", "Apparel"]
 
+products = []
 for i, name in enumerate(product_names, start=1):
     upc = f"{100000000000 + i}"  # Generate unique UPC
     size = f"{random.randint(1, 5)}L" if random.choice([True, False]) else f"{random.randint(100, 500)}g"
     brand = random.choice(brands)
     prod_type = random.choice(product_types)
-    cursor.execute("INSERT INTO Products (UPC, Name, Size, Brand, Type) VALUES (?, ?, ?, ?, ?)",
-                   (upc, name, size, brand, prod_type))
+    products.append((upc, name, size, brand, prod_type))
+
+cursor.executemany("INSERT INTO Products (UPC, Name, Size, Brand, Type) VALUES (?, ?, ?, ?, ?)", products)
 
 # Populate Stores table
 locations = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"]
+stores = []
 for i, location in enumerate(locations, start=1):
     hours = "9 AM - 9 PM"
-    cursor.execute("INSERT INTO Stores (StoreID, Location, Hours) VALUES (?, ?, ?)",
-                   (i, location, hours))
+    stores.append((i, location, hours))
+
+cursor.executemany("INSERT INTO Stores (StoreID, Location, Hours) VALUES (?, ?, ?)", stores)
 
 # Populate Customers table
+customers = []
 for i in range(1, 21):
     name = f"Customer_{i}"
     email = f"customer{i}@example.com"
     membership_status = random.choice([True, False])
-    cursor.execute("INSERT INTO Customers (CustomerID, Name, Email, MembershipStatus) VALUES (?, ?, ?, ?)",
-                   (i, name, email, membership_status))
+    customers.append((i, name, email, membership_status))
+
+cursor.executemany("INSERT INTO Customers (CustomerID, Name, Email, MembershipStatus) VALUES (?, ?, ?, ?)", customers)
 
 # Populate Vendors table
 vendor_names = [
     "PepsiCo", "Coca-Cola Company", "Nestle", "Procter & Gamble", "Unilever",
     "Samsung Electronics", "Sony Corporation", "LG Electronics", "Apple Inc.", "Nike Inc."
 ]
-for i, name in enumerate(vendor_names, start=1):
-    cursor.execute("INSERT INTO Vendors (VendorID, Name) VALUES (?, ?)", (i, name))
+vendors = [(i, name) for i, name in enumerate(vendor_names, start=1)]
+cursor.executemany("INSERT INTO Vendors (VendorID, Name) VALUES (?, ?)", vendors)
+
+# Populate Inventory table
+inventory = []
+for store_id, location in enumerate(locations, start=1):
+    available_products = random.sample(products, k=random.randint(15, 25))  # Each store stocks 15-25 products
+    for product in available_products:
+        upc = product[0]
+        quantity = random.randint(50, 300)
+        inventory.append((store_id, upc, quantity))
+
+cursor.executemany("INSERT INTO Inventory (StoreID, UPC, Quantity) VALUES (?, ?, ?)", inventory)
 
 # Populate Orders and OrderDetails tables
 start_date = datetime.now() - timedelta(days=100)
-for i in range(1, 51):
+orders = []
+order_details = []
+
+for i in range(1, 101):  # 100 orders
     customer_id = random.randint(1, 20)
+    store_id = random.randint(1, len(locations))  # Assign order to a random store
     order_date = (start_date + timedelta(days=random.randint(1, 100))).strftime('%Y-%m-%d')
-    total_amount = round(random.uniform(20, 200), 2)
-    cursor.execute("INSERT INTO Orders (OrderID, CustomerID, Date, TotalAmount) VALUES (?, ?, ?, ?)",
-                   (i, customer_id, order_date, total_amount))
-    
-    # Ensure unique UPCs in OrderDetails
-    upcs_used = set()
-    for _ in range(random.randint(2, 5)):  # Add 2-5 products per order
-        upc = f"{100000000000 + random.randint(1, len(product_names))}"
-        while upc in upcs_used:  # Avoid duplicate UPCs
-            upc = f"{100000000000 + random.randint(1, len(product_names))}"
-        upcs_used.add(upc)
-        quantity = random.randint(1, 10)
-        price = round(random.uniform(1, 50), 2)
-        cursor.execute("INSERT INTO OrderDetails (OrderID, UPC, Quantity, Price) VALUES (?, ?, ?, ?)",
-                       (i, upc, quantity, price))
+    total_amount = 0
+    orders.append((i, customer_id, order_date, total_amount))
 
-# Populate Inventory table
-for i in range(1, 6):  # 5 stores
-    for j in range(1, len(product_names) + 1):  # Products
-        upc = f"{100000000000 + j}"
-        quantity = random.randint(10, 100)
-        cursor.execute("INSERT INTO Inventory (StoreID, UPC, Quantity) VALUES (?, ?, ?)",
-                       (i, upc, quantity))
+    # Select products from the store's inventory
+    store_inventory = [inv for inv in inventory if inv[0] == store_id]
+    selected_products = random.sample(store_inventory, k=random.randint(2, 5))
+    for product in selected_products:
+        upc = product[1]
+        quantity = random.randint(1, 10) * random.randint(1, store_id)  # Add variability by store
+        price = round(random.uniform(10, 100), 2)
+        total_amount += quantity * price
+        order_details.append((i, upc, quantity, price))
 
-print("Data populated successfully.")
+    # Update the total amount for the order
+    orders[-1] = (i, customer_id, order_date, round(total_amount, 2))
+
+cursor.executemany("INSERT INTO Orders (OrderID, CustomerID, Date, TotalAmount) VALUES (?, ?, ?, ?)", orders)
+cursor.executemany("INSERT INTO OrderDetails (OrderID, UPC, Quantity, Price) VALUES (?, ?, ?, ?)", order_details)
+
+print("Data repopulated successfully with realistic variability.")
 conn.commit()
 conn.close()

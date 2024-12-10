@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queries Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9fafb;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .comparison {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Queries Dashboard</h1>
+
+    <!-- Total Sales Section -->
+    <h2>Total Sales</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Coke</td>
+                <td>{{ total_sales.TotalCokeQuantity }}</td>
+                <td>${{ "%.2f" | format(total_sales.TotalCokeAmount) }}</td>
+            </tr>
+            <tr>
+                <td>Pepsi</td>
+                <td>{{ total_sales.TotalPepsiQuantity }}</td>
+                <td>${{ "%.2f" | format(total_sales.TotalPepsiAmount) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="comparison">{{ total_sales.Comparison }}</div>
+
+    <!-- Sales by Store Section -->
+    <h2>Sales by Store</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Store</th>
+                <th>Coke Sales</th>
+                <th>Pepsi Sales</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales_by_store %}
+            <tr>
+                <td>{{ sale.StoreName }}</td>
+                <td>{{ sale.CokeSales }}</td>
+                <td>{{ sale.PepsiSales }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Top 5 Products by Store Section -->
+    <h2>Top 5 Products Sold by Store</h2>
+    {% for store, products in top_products.items() %}
+    <h3>{{ store }}</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Total Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.ProductName }}</td>
+                <td>{{ product.TotalSold }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+
+    <!-- Top 5 Products Sold This Year Section -->
+    <h2>Top 5 Products Sold This Year</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Total Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in top_products_this_year %}
+            <tr>
+                <td>{{ product.ProductName }}</td>
+                <td>{{ product.TotalSold }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Top 3 Products Bought with Pepsi Section -->
+    <h2>Top 3 Types of Products Bought with Pepsi</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Type</th>
+                <th>Purchase Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in top_products_with_pepsi %}
+            <tr>
+                <td>{{ product.ProductType }}</td>
+                <td>{{ product.PurchaseCount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

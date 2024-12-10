@@ -1,7 +1,7 @@
 import sqlite3
 
 # Create a connection to SQLite database (it will create the file if it doesn't exist)
-conn = sqlite3.connect('retailer_2.db')
+conn = sqlite3.connect('retailer_3.db')
 cursor = conn.cursor()
 
 # Create tables

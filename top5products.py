@@ -1,7 +1,7 @@
 import sqlite3
 
 # Connect to the SQLite database
-conn = sqlite3.connect('retailer_2.db')
+conn = sqlite3.connect('retailer_3.db')
 cursor = conn.cursor()
 
 # Query to find top 5 products sold at each location
