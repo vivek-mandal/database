@@ -4,11 +4,11 @@ import sqlite3
 conn = sqlite3.connect('retailer_2.db')
 cursor = conn.cursor()
 
-# Query to get Coke and Pepsi sales by store
+# Query to get Nestle Water and Pepsi sales by store
 query = '''
 SELECT 
     s.Location AS StoreName,
-    SUM(CASE WHEN p.Name = 'Coke' THEN od.Quantity ELSE 0 END) AS CokeSales,
+    SUM(CASE WHEN p.Name = 'Nestle Water' THEN od.Quantity ELSE 0 END) AS CokeSales,
     SUM(CASE WHEN p.Name = 'Pepsi' THEN od.Quantity ELSE 0 END) AS PepsiSales
 FROM OrderDetails od
 JOIN Products p ON od.UPC = p.UPC

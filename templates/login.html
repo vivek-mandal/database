@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f3f9ff; /* Light blue background */
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            border: 1px solid #cfd8e3;
+            border-radius: 8px;
+            padding: 30px 40px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #005aa7; /* Teams-inspired blue */
+            margin-bottom: 20px;
+        }
+
+        form label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #cfd8e3;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        form input:focus {
+            outline: none;
+            border-color: #005aa7; /* Blue border on focus */
+            box-shadow: 0 0 4px rgba(0, 90, 167, 0.4);
+        }
+
+        form button {
+            background-color: #005aa7;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        form button:hover {
+            background-color: #00488f; /* Darker blue on hover */
+        }
+
+        .messages {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #d32f2f; /* Red for error messages */
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form method="post">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Enter your username" required>
+            
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Enter your password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages">
+                    {% for category, message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

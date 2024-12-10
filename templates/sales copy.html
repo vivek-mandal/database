@@ -8,12 +8,45 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f3f9ff; /* Light blue background */
+            background-color: #f9fafb;
         }
 
         h1, h2, h3 {
             text-align: center;
-            color: #005aa7; /* Teams-inspired blue */
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .comparison {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
         }
 
         .header {
@@ -32,51 +65,13 @@
             font-size: 16px;
             text-decoration: none;
             color: white;
-            background-color: #005aa7;
+            background-color: #007bff;
             padding: 10px 20px;
             border-radius: 5px;
         }
 
         .header .logout:hover {
-            background-color: #00488f; /* Darker blue on hover */
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px auto;
-            background-color: #ffffff; /* White table background */
-            border: 1px solid #cfd8e3; /* Light blue border */
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #cfd8e3; /* Light blue border for rows */
-        }
-
-        th {
-            background-color: #005aa7; /* Teams-inspired blue */
-            color: white;
-            text-transform: uppercase;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9; /* Subtle alternating row color */
-        }
-
-        tr:hover {
-            background-color: #eaf3ff; /* Light blue hover effect */
-        }
-
-        .comparison {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 20px;
-            color: #005aa7; /* Teams-inspired blue */
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -100,7 +95,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>Nestle Water</td>
+                <td>Coke</td>
                 <td>{{ total_sales.TotalCokeQuantity }}</td>
                 <td>${{ "%.2f" | format(total_sales.TotalCokeAmount) }}</td>
             </tr>
