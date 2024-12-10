@@ -1,0 +1,52 @@
+Table Products {
+    UPC varchar [primary key]
+    Name varchar
+    Size varchar
+    Brand varchar
+    Type varchar
+}
+
+Table Stores {
+    StoreID int [primary key]
+    Location varchar
+    Hours varchar
+}
+
+Table Customers {
+    CustomerID int [primary key]
+    Name varchar
+    Email varchar
+    MembershipStatus boolean
+}
+
+Table Vendors {
+    VendorID int [primary key]
+    Name varchar
+}
+
+Table Orders {
+    OrderID int [primary key]
+    CustomerID int
+    Date datetime
+    TotalAmount float
+}
+
+Table OrderDetails {
+    OrderID int [primary key]
+    UPC varchar [primary key]
+    Quantity int
+    Price float
+}
+
+Table Inventory {
+    StoreID int [primary key]
+    UPC varchar [primary key]
+    Quantity int
+
+}
+
+Ref: Orders.CustomerID > Customers.CustomerID
+Ref: OrderDetails.OrderID > Orders.OrderID
+Ref: OrderDetails.UPC > Products.UPC
+Ref: Inventory.StoreID > Stores.StoreID
+Ref: Inventory.UPC > Products.UPC
